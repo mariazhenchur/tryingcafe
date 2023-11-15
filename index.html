@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin-bottom: 10px;
+        }
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+    <title>Bonus Calculator</title>
+</head>
+<body>
+    <h2>Bonus Calculator</h2>
+    
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" placeholder="Enter phone number">
+    
+    <label for="price">Price:</label>
+    <input type="number" id="price" placeholder="Enter price">
 
+    <button onclick="calculateBonus()">Calculate Bonus</button>
+
+    <div id="output"></div>
+
+    <label for="searchPhoneNumber">Search Bonuses by Phone Number:</label>
+    <input type="text" id="searchPhoneNumber" placeholder="Enter phone number">
+    
+    <button onclick="searchBonuses()">Search Bonuses</button>
+
+    <script>
+        function calculateBonus() {
+            var phoneNumber = document.getElementById('phoneNumber').value;
+            var price = parseFloat(document.getElementById('price').value);
+            
+            if (isNaN(price)) {
+                alert("Please enter a valid price.");
+                return;
+            }
+
+            // Retrieve existing data from localStorage
+            var data = JSON.parse(localStorage.getItem('bonusData')) || {};
+
+            // Calculate bonus
+            var bonus = price * 0.01;
+
+            // Update or create entry in the data
+            data[phoneNumber] = (data[phoneNumber] || 0) + bonus;
+
+            // Save updated data back to localStorage
+            localStorage.setItem('bonusData', JSON.stringify(data));
+
+            // Display output
+            document.getElementById('output').innerText = `Bonus for ${phoneNumber}: $${bonus.toFixed(2)}`;
+        }
+
+        function searchBonuses() {
+            var searchPhoneNumber = document.getElementById('searchPhoneNumber').value;
+
+            // Retrieve data from localStorage
+            var data = JSON.parse(localStorage.getItem('bonusData')) || {};
+
+            // Display output
+            var bonusAmount = data[searchPhoneNumber] || 0;
+            alert(`${searchPhoneNumber} has a total bonus of $${bonusAmount.toFixed(2)}`);
+        }
+    </script>
+</body>
+</html>
